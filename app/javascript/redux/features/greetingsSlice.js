@@ -2,15 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState =  {
     loading: false,
-    message: "",
+    message: null,
     error: "",
 }
 
 export const fetchMessage = createAsyncThunk('message/fetchMessage', async () => {
     try {
-        const response = await fetch('http://127.0.0.1:3000/api/v1/greetings/random');
+        const response = await fetch('/greetings/random');
         const data =  await response.json();
-        return data;
+        return data.greeting;
     } catch (error) {
         throw new Error('Failed to fetch Greeting');
     }
@@ -19,6 +19,7 @@ export const fetchMessage = createAsyncThunk('message/fetchMessage', async () =>
 const greetingSlice = createSlice({
     name: 'greeting',
     initialState,
+    reducers:{},
     extraReducers: (builder) => {
         builder.addCase(fetchMessage.fulfilled, (state, action) =>{
             state.message = action.payload;
